@@ -1,0 +1,295 @@
+name: small_span_aug
+micro_batch_size: 32
+global_batch_size: 32
+tensor_model_parallel_size: 1
+pipeline_model_parallel_size: 1
+resume_from_checkpoint: null
+pipeline_model_parallel_split_rank: 0
+make_vocab_size_divisible_by: 128
+pre_process: true
+post_process: true
+megatron_amp_O2: false
+seq_length: 512
+max_position_embeddings: 512
+num_layers: 6
+hidden_size: 512
+ffn_hidden_size: 2048
+num_attention_heads: 8
+init_method_std: 0.02
+hidden_dropout: 0.1
+attention_dropout: 0.1
+position_embedding_type: learned_absolute
+relative_position_bias_self_attention_only: true
+relative_attention_num_buckets: 32
+relative_attention_max_distance: 128
+kv_channels: null
+apply_query_key_layer_scaling: true
+layernorm_epsilon: 1.0e-05
+persist_layer_norm: true
+gradient_as_bucket_view: true
+bias_gelu_fusion: true
+masked_softmax_fusion: true
+bias_dropout_add_fusion: true
+bias: true
+normalization: layernorm
+encoder_arch: transformer
+decoder_arch: transformer
+activation: gelu
+headscale: false
+share_token_embeddings: true
+share_decoder_tokens_head_embeddings: false
+tokenizer:
+  library: regex
+  type: null
+  model: nemo:111b90cc2819425382967ab999101096_megamolbart.model
+  vocab_file: nemo:36b36f49c3e64962a7b54f1a1ba2b580_megamolbart.vocab
+  merge_file: null
+data:
+  links_file: /workspace/bionemo/examples/molecule/megamolbart/dataset/ZINC-downloader.txt
+  dataset_path: /data/zinc_csv_test
+  dataset:
+    train: x000
+    test: x000
+    val: x000
+  encoder_augment: true
+  encoder_mask: true
+  decoder_augment: true
+  decoder_mask: false
+  mask_prob: 0.1
+  span_lambda: 3.0
+  micro_batch_size: 32
+  num_workers: 10
+  dataloader_type: single
+  canonicalize_input: true
+  max_seq_length: 512
+  seed: 42
+  skip_lines: 0
+  drop_last: false
+  pin_memory: false
+  data_impl: csv_mmap
+  data_impl_kwargs:
+    csv_mmap:
+      newline_int: 10
+      header_lines: 1
+      workers: 10
+      sort_dataset_paths: true
+      data_sep: ','
+      data_col: 1
+  use_upsampling: true
+optim:
+  name: fused_adam
+  lr: 1.0
+  betas:
+  - 0.9
+  - 0.999
+  eps: 1.0e-08
+  weight_decay: 0.01
+  sched:
+    name: NoamAnnealing
+    d_model: 512
+    warmup_steps: 8000
+    warmup_ratio: null
+    max_steps: 1000000
+    min_lr: 1.0e-05
+precision: 16
+target: bionemo.model.molecule.megamolbart.megamolbart_model.MegaMolBARTModel
+nemo_version: 1.18.1
+encoder:
+  name: small_span_aug
+  micro_batch_size: 32
+  global_batch_size: 32
+  tensor_model_parallel_size: 1
+  pipeline_model_parallel_size: 1
+  resume_from_checkpoint: null
+  pipeline_model_parallel_split_rank: 0
+  make_vocab_size_divisible_by: 128
+  pre_process: true
+  post_process: true
+  megatron_amp_O2: false
+  seq_length: 512
+  max_position_embeddings: 512
+  num_layers: 6
+  hidden_size: 512
+  ffn_hidden_size: 2048
+  num_attention_heads: 8
+  init_method_std: 0.02
+  hidden_dropout: 0.1
+  attention_dropout: 0.1
+  position_embedding_type: learned_absolute
+  relative_position_bias_self_attention_only: true
+  relative_attention_num_buckets: 32
+  relative_attention_max_distance: 128
+  kv_channels: null
+  apply_query_key_layer_scaling: true
+  layernorm_epsilon: 1.0e-05
+  persist_layer_norm: true
+  gradient_as_bucket_view: true
+  bias_gelu_fusion: true
+  masked_softmax_fusion: true
+  bias_dropout_add_fusion: true
+  bias: true
+  normalization: layernorm
+  encoder_arch: transformer
+  decoder_arch: transformer
+  activation: gelu
+  headscale: false
+  share_token_embeddings: true
+  share_decoder_tokens_head_embeddings: false
+  tokenizer:
+    library: regex
+    type: null
+    model: /tokenizers/molecule/megamolbart/vocab/megamolbart.model
+    vocab_file: /tokenizers/molecule/megamolbart/vocab/megamolbart.vocab
+    merge_file: null
+  data:
+    links_file: /workspace/bionemo/examples/molecule/megamolbart/dataset/ZINC-downloader.txt
+    dataset_path: /data/zinc_csv_test
+    dataset:
+      train: x000
+      test: x000
+      val: x000
+    encoder_augment: true
+    encoder_mask: true
+    decoder_augment: true
+    decoder_mask: false
+    mask_prob: 0.1
+    span_lambda: 3.0
+    micro_batch_size: 32
+    num_workers: 10
+    dataloader_type: single
+    canonicalize_input: true
+    max_seq_length: 512
+    seed: 42
+    skip_lines: 0
+    drop_last: false
+    pin_memory: false
+    data_impl: csv_mmap
+    data_impl_kwargs:
+      csv_mmap:
+        newline_int: 10
+        header_lines: 1
+        workers: 10
+        sort_dataset_paths: true
+        data_sep: ','
+        data_col: 1
+    use_upsampling: true
+  optim:
+    name: fused_adam
+    lr: 1.0
+    betas:
+    - 0.9
+    - 0.999
+    eps: 1.0e-08
+    weight_decay: 0.01
+    sched:
+      name: NoamAnnealing
+      d_model: 512
+      warmup_steps: 8000
+      warmup_ratio: null
+      max_steps: 1000000
+      min_lr: 1.0e-05
+  precision: 16
+  target: bionemo.model.molecule.megamolbart.megamolbart_model.MegaMolBARTModel
+  nemo_version: 1.18.1
+  arch: transformer
+  bias_activation_fusion: true
+decoder:
+  name: small_span_aug
+  micro_batch_size: 32
+  global_batch_size: 32
+  tensor_model_parallel_size: 1
+  pipeline_model_parallel_size: 1
+  resume_from_checkpoint: null
+  pipeline_model_parallel_split_rank: 0
+  make_vocab_size_divisible_by: 128
+  pre_process: true
+  post_process: true
+  megatron_amp_O2: false
+  seq_length: 512
+  max_position_embeddings: 512
+  num_layers: 6
+  hidden_size: 512
+  ffn_hidden_size: 2048
+  num_attention_heads: 8
+  init_method_std: 0.02
+  hidden_dropout: 0.1
+  attention_dropout: 0.1
+  position_embedding_type: learned_absolute
+  relative_position_bias_self_attention_only: true
+  relative_attention_num_buckets: 32
+  relative_attention_max_distance: 128
+  kv_channels: null
+  apply_query_key_layer_scaling: true
+  layernorm_epsilon: 1.0e-05
+  persist_layer_norm: true
+  gradient_as_bucket_view: true
+  bias_gelu_fusion: true
+  masked_softmax_fusion: true
+  bias_dropout_add_fusion: true
+  bias: true
+  normalization: layernorm
+  encoder_arch: transformer
+  decoder_arch: transformer
+  activation: gelu
+  headscale: false
+  share_token_embeddings: true
+  share_decoder_tokens_head_embeddings: false
+  tokenizer:
+    library: regex
+    type: null
+    model: /tokenizers/molecule/megamolbart/vocab/megamolbart.model
+    vocab_file: /tokenizers/molecule/megamolbart/vocab/megamolbart.vocab
+    merge_file: null
+  data:
+    links_file: /workspace/bionemo/examples/molecule/megamolbart/dataset/ZINC-downloader.txt
+    dataset_path: /data/zinc_csv_test
+    dataset:
+      train: x000
+      test: x000
+      val: x000
+    encoder_augment: true
+    encoder_mask: true
+    decoder_augment: true
+    decoder_mask: false
+    mask_prob: 0.1
+    span_lambda: 3.0
+    micro_batch_size: 32
+    num_workers: 10
+    dataloader_type: single
+    canonicalize_input: true
+    max_seq_length: 512
+    seed: 42
+    skip_lines: 0
+    drop_last: false
+    pin_memory: false
+    data_impl: csv_mmap
+    data_impl_kwargs:
+      csv_mmap:
+        newline_int: 10
+        header_lines: 1
+        workers: 10
+        sort_dataset_paths: true
+        data_sep: ','
+        data_col: 1
+    use_upsampling: true
+  optim:
+    name: fused_adam
+    lr: 1.0
+    betas:
+    - 0.9
+    - 0.999
+    eps: 1.0e-08
+    weight_decay: 0.01
+    sched:
+      name: NoamAnnealing
+      d_model: 512
+      warmup_steps: 8000
+      warmup_ratio: null
+      max_steps: 1000000
+      min_lr: 1.0e-05
+  precision: 16
+  target: bionemo.model.molecule.megamolbart.megamolbart_model.MegaMolBARTModel
+  nemo_version: 1.18.1
+  arch: transformer
+  bias_activation_fusion: true
+tokens_head_bias: false
