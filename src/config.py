@@ -26,6 +26,7 @@ def get_megamolbart_config() -> BartConfig:
         pad_token_id=0,
         bos_token_id=1,
         eos_token_id=2,
+        normalize_embedding=False,
         is_encoder_decoder=True
     )
 
