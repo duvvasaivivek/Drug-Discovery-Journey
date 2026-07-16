@@ -1,51 +1,24 @@
-# MegaMolBART PyTorch Pipeline
+# Drug Journey
 
-A native, standalone PyTorch pipeline for NVIDIA's MegaMolBART model. 
-This project allows you to run drug discovery embeddings, latent interpolations, and SMILES generations **without** requiring NVIDIA's heavy `nemo_toolkit` dependencies (which often fail to compile on Windows).
+Welcome to the **Drug Journey** repository. This is a master repository designed to house various models and tools related to drug discovery and chemical language models. 
 
-## Features
-- **Standalone PyTorch Loader:** Parses NVIDIA's `.nemo` weights and seamlessly maps them to a HuggingFace `BartForConditionalGeneration` architecture.
-- **Custom Tokenizer:** Fully replicates the NVIDIA Regex SMILES tokenization rules.
-- **Latent Space Embedding:** Extracts 512-dimensional continuous vectors representing the chemical meaning of molecules.
-- **Molecular Interpolation:** Interpolates between the embeddings of two different drugs and uses the Decoder to generate novel hybrid molecules.
-- **RDKit Validation:** Filters out chemically impossible outputs and calculates real-world properties (Molecular Weight, LogP, TPSA) for valid discoveries.
+## Repository Structure
 
-## Project Structure
-```text
-project/
-├── models/
-│   └── megamolbart/            # (Download the .nemo file and extract it here)
-├── src/
-│   ├── config.py               # Key mapping and HuggingFace BartConfig
-│   ├── loader.py               # Main model loader
-│   ├── tokenizer.py            # Regex-based SMILES tokenizer
-│   ├── embeddings.py           # Functions to extract numerical vectors
-│   ├── generation.py           # Decoder generation and latent interpolation
-│   └── utils.py                # RDKit validation and property extraction
-├── examples/
-│   └── pipeline_demo.py        # End-to-end demo script
-└── scripts/
-    └── benchmark.py            # Performance measurement script
-```
+The project follows a monorepo-style structure where each machine learning model or specific toolkit has its own isolated subfolder. The virtual environment and high-level requirements are shared across the repository in the root folder.
 
-## Setup & Requirements
+### Current Models:
+- **`nvidia_megamolbart/`**: A standalone PyTorch pipeline for NVIDIA's MegaMolBART model, allowing for drug discovery embeddings, latent interpolations, and SMILES generations. Please see the [Nvidia MegaMolBART README](nvidia_megamolbart/README.md) for specific usage, setup, and details.
 
-1. Ensure you have Python 3.10+ installed.
-2. Install the necessary lightweight dependencies:
+## Setup
+1. Create and activate a virtual environment (`venv`) at the root of the repository.
+2. Install the shared dependencies:
    ```bash
-   pip install torch transformers numpy rdkit
+   pip install -r requirements.txt
    ```
-3. Download the MegaMolBART `.nemo` checkpoint from the NVIDIA NGC catalog.
-4. Extract the `.nemo` file (it is just a tar archive) into the `models/megamolbart` directory. You should see `model_weights.ckpt`, `model_config.yaml`, and the vocab/model files inside.
+3. Navigate to a specific model's subfolder (e.g., `cd nvidia_megamolbart`) and follow its localized instructions.
 
-## Usage
-
-To run the end-to-end pipeline demonstrating embeddings, latent interpolation, and validation, run:
-
-```bash
-python examples/pipeline_demo.py
-```
-
-### Performance
-
-Because the model natively maps to HuggingFace BART, it benefits from highly optimized PyTorch attention mechanisms. Even on a standard CPU, extracting embeddings for a batch of molecules takes only a fraction of a second. Check the `scripts/benchmark.py` script for exact performance numbers on your hardware.
+## Resources
+The root folder also contains summaries and resources related to Chemical Language Models:
+- `Paper_Summary_Chemical_Language_Models.md`
+- `CLM_Resources.md`
+- Relevant research papers (PDFs).
