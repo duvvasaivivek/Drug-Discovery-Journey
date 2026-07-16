@@ -8,6 +8,7 @@ The project follows a monorepo-style structure where each machine learning model
 
 ### Current Models:
 - **`nvidia_megamolbart/`**: A standalone PyTorch pipeline for NVIDIA's MegaMolBART model, allowing for drug discovery embeddings, latent interpolations, and SMILES generations. Please see the [Nvidia MegaMolBART README](nvidia_megamolbart/README.md) for specific usage, setup, and details.
+- **`chemberta/`**: A pipeline for using DeepChem's ChemBERTa model (transformer for SMILES) from Hugging Face for Masked Language Modeling and embedding extraction. Please see the [ChemBERTa README](chemberta/README.md).
 
 ## Setup
 1. Create and activate a virtual environment (`venv`) at the root of the repository.
