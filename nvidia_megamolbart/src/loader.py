@@ -36,6 +36,14 @@ def load_model(model_dir: str) -> Tuple[BartForConditionalGeneration, MegaMolBAR
     config = get_megamolbart_config()
     config.vocab_size = tokenizer.vocab_size
     model = BartForConditionalGeneration(config)
+    
+    # NeMo MegaMolBART doesn't use layernorm on embeddings, but HuggingFace Bart does by default.
+    # We replace it with an Identity layer to bypass the normalization which would otherwise destroy the embeddings.
+    model.model.encoder.layernorm_embedding = torch.nn.Identity()
+    model.model.decoder.layernorm_embedding = torch.nn.Identity()
+    
+    from .pre_ln_patch import patch_bart_for_pre_ln
+    patch_bart_for_pre_ln(model)
 
     # 4. Load Raw PyTorch Checkpoint
     logger.info("Loading PyTorch State Dict...")
